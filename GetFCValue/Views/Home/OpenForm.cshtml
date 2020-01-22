@@ -1,0 +1,50 @@
+﻿@using GetFCValue.Models;
+@model GetFCValue.Models.Cliente
+
+@{
+    ViewBag.Title = "OpenForm";
+}
+
+@{
+    IList<SelectListItem> list = Enum.GetValues(typeof(TipoPessoa)).Cast<TipoPessoa>().Select(x => new SelectListItem { Text = x.ToString(), Value = ((int)x).ToString() }).ToList();
+
+    SelectList data = new SelectList(list, "Value", "Text");
+}
+
+<div class="page-header">
+    <h2>OpenForm</h2>
+</div>
+
+@using (Html.BeginForm("SubmitForm", "Home", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nome)
+        @Html.TextBoxFor(model => model.Nome, new { @class = "form-control", @placeholder = "Nome:", @id = "Nome" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CpfCnpj)
+        @Html.TextBoxFor(model => model.CpfCnpj, new { @class = "form-control", @placeholder = "CpfCnpj:", @id = "CpfCnpj" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TipoPessoa)
+        @Html.DropDownList("TipoPessoa", data, "Selecione o Tipo de Pessoa:", new { @class = "form-control" })
+        @Html.Hidden("hidTipoPessoa")
+    </div>
+
+    <input type="submit" class="btn btn-primary " value="Submit" />
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#TipoPessoa").change(function(){
+            tipoPessoaText = $("#TipoPessoa option:selected").text();
+            $("#hidTipoPessoa").val(tipoPessoaText);
+        });
+    });
+    </script>
+}
+
